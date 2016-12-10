@@ -10,5 +10,6 @@ if (file_exists(__DIR__.'/../../autoload.php')) {
 $application = new Symfony\Component\Console\Application();
 
 $application->add(new LorinLee\LaradockCli\Console\InitCommand);
+$application->add(new LorinLee\LaradockCli\Console\UpCommand);
 
 $application->run();
