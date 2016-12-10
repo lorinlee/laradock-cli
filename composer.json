@@ -1,0 +1,19 @@
+{
+    "name": "lorinlee/laradock-cli",
+    "description": "laradock-cli",
+    "license": "Apache",
+    "authors": [
+        {
+            "name": "LorinLee",
+            "email": "lorinlee1996@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "LorinLee\\LaradockCli\\Console\\": "src/"
+        }
+    },
+    "require": {
+        "symfony/console": "^3.1"
+    }
+}
