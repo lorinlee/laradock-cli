@@ -28,7 +28,7 @@ class InitCommand extends Command
     {
         $this
             ->setName('init')
-            ->setDescription('Create Laradock for current Laravel project')
+            ->setDescription('Creates Laradock for current Laravel project')
         ;
     }
 
@@ -56,7 +56,6 @@ class InitCommand extends Command
         $output->writeln('<info>Init Laradock...</info>');
 
         $process->run(function ($type, $line) use ($output) {
-            $output->writeln($type);
             $output->writeln($line);
         });
 
@@ -73,5 +72,5 @@ class InitCommand extends Command
     {
         return 'https://github.com/LaraDock/laradock.git';
     }
-    
+
 }
