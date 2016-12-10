@@ -58,11 +58,11 @@ class UpCommand extends Command
             }
         }
 
-        $up_parameter = implode(' ', $containers);
+        $upParameter = implode(' ', $containers);
 
-        $output->writeln('<info>Starting '. $up_parameter. '</info>');
+        $output->writeln('<info>Starting '. $upParameter. '</info>');
 
-        $process = new Process('cd laradock && docker-compose up -d '. $up_parameter);
+        $process = new Process('cd laradock && docker-compose up -d '. $upParameter);
         $process->run(function ($type, $line) use ($output) {
             $output->write($line);
         });
