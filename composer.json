@@ -15,6 +15,7 @@
     },
     "require": {
         "symfony/console": "^3.1",
-        "symfony/filesystem": "^3.2"
+        "symfony/filesystem": "^3.2",
+        "symfony/process": "^3.2"
     }
 }
