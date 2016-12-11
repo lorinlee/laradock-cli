@@ -40,14 +40,14 @@ class WorkspaceCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $workspace_command = 'cd laradock && docker-compose exec ';
+        $workspaceCommand = 'cd laradock && docker-compose exec ';
         if (! $input->getOption('root')) {
-            $workspace_command .= '--user=laradock ';
+            $workspaceCommand .= '--user=laradock ';
         }
 
-        $workspace_command .= 'workspace bash';
+        $workspaceCommand .= 'workspace bash';
 
-        passthru($workspace_command);
+        passthru($workspaceCommand);
 
     }
 
