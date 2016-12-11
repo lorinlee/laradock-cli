@@ -30,7 +30,7 @@ class UpCommand extends Command
         $this
             ->setName('up')
             ->setDescription('Starts containers')
-            ->addArgument('', InputArgument::IS_ARRAY, 'Containers', null)
+            ->addArgument('containers', InputArgument::IS_ARRAY, 'Containers', null)
             ->addOption('default', 'd', InputOption::VALUE_OPTIONAL, 'Use default containers: nginx redis mysql')
         ;
     }
@@ -44,7 +44,7 @@ class UpCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $containers = $input->getArgument('');
+        $containers = $input->getArgument('containers');
         if (count($containers) === 0) {
             if ($input->getOption('default')) {
                 $containers = $this->defaultContainers();
