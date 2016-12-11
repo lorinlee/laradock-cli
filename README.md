@@ -1,6 +1,10 @@
 # laradock-cli
 A small commandline tool to create, start, stop laradock, or enter the workspace
 
+# Install
+
+`composer global require lorinlee/laradock-cli`
+
 # Usage
 ```
 # Enter the laravel project directory
