@@ -41,6 +41,10 @@ class StopCommand extends Command
 
         $process = new Process($stopCommand);
 
+        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+            $process->setTty(true);
+        }
+
         $output->writeln('<info>Stop Containers...</info>');
 
         $process->run(function ($type, $line) use ($output) {

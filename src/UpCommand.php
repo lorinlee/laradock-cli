@@ -9,13 +9,11 @@
 namespace LorinLee\LaradockCli\Console;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Process\Process;
 
 class UpCommand extends Command
@@ -63,6 +61,11 @@ class UpCommand extends Command
         $output->writeln('<info>Starting '. $upParameter. '</info>');
 
         $process = new Process('cd laradock && docker-compose up -d '. $upParameter);
+
+        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+            $process->setTty(true);
+        }
+
         $process->run(function ($type, $line) use ($output) {
             $output->write($line);
         });

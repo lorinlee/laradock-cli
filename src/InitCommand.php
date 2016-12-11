@@ -10,10 +10,8 @@ namespace LorinLee\LaradockCli\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 
@@ -41,15 +39,14 @@ class InitCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fs = new Filesystem();
 
-        if ($fs->exists('laradock')) {
+        if (file_exists('laradock')) {
             throw new RuntimeException('laradock exists');
         }
 
         $process = new Process('git submodule add '. $this->laradockRepo());
 
-        if ('\\' !== DIRECTORY_SEPARATOR && $fs->exists('/dev/tty') && is_readable('/dev/tty')) {
+        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);
         }
 
