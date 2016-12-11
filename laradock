@@ -11,5 +11,6 @@ $application = new Symfony\Component\Console\Application();
 
 $application->add(new LorinLee\LaradockCli\Console\InitCommand);
 $application->add(new LorinLee\LaradockCli\Console\UpCommand);
+$application->add(new LorinLee\LaradockCli\Console\WorkspaceCommand);
 
 $application->run();
