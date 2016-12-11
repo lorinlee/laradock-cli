@@ -28,8 +28,8 @@ class UpCommand extends Command
         $this
             ->setName('up')
             ->setDescription('Starts containers')
+            ->addOption('default', 'd', InputOption::VALUE_NONE, 'Use default containers: nginx redis mysql')
             ->addArgument('containers', InputArgument::IS_ARRAY, 'Containers', null)
-            ->addOption('default', 'd', InputOption::VALUE_OPTIONAL, 'Use default containers: nginx redis mysql')
         ;
     }
 

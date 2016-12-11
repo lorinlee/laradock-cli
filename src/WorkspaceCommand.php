@@ -25,7 +25,7 @@ class WorkspaceCommand extends Command
         $this
             ->setName('workspace')
             ->setDescription('Enters the workspace')
-            ->addOption('root', null, InputOption::VALUE_OPTIONAL, 'Using root', null)
+            ->addOption('root', null, InputOption::VALUE_NONE, 'Using root', null)
         ;
     }
 

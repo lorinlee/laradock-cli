@@ -26,17 +26,12 @@ class PsCommand extends Command
         $this
             ->setName('ps')
             ->setDescription('Lists all the running containers')
-            ->addOption('all', 'a', InputOption::VALUE_OPTIONAL, 'Lists all the containers')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $psCommand = 'cd laradock && docker-compose ps';
-
-        if ($input->getOption('all')) {
-            $psCommand .= ' -a';
-        }
 
         $process = new Process($psCommand);
 
