@@ -44,7 +44,9 @@ class InitCommand extends Command
             throw new RuntimeException('laradock exists');
         }
 
-        $process = new Process('git submodule add '. $this->laradockRepo());
+        $initCommand = file_exists('.git') ? 'git submodule add' : 'git clone';
+
+        $process = new Process($initCommand. ' '. $this->laradockRepo());
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);
