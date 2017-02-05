@@ -23,7 +23,7 @@ class WorkspaceCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('workspace')
+            ->setName('bash')
             ->setDescription('Enters the workspace')
             ->addOption('root', null, InputOption::VALUE_NONE, 'Using root', null)
         ;

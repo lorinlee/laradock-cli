@@ -11,7 +11,7 @@ $application = new Symfony\Component\Console\Application('Laradock-Cli');
 
 $application->add(new LorinLee\LaradockCli\Console\InitCommand);
 $application->add(new LorinLee\LaradockCli\Console\UpCommand);
-$application->add(new LorinLee\LaradockCli\Console\WorkspaceCommand);
+$application->add(new LorinLee\LaradockCli\Console\BashCommand);
 $application->add(new LorinLee\LaradockCli\Console\StopCommand);
 $application->add(new LorinLee\LaradockCli\Console\PsCommand);
 
