@@ -13,21 +13,23 @@ A small commandline tool to create, start, stop laradock, or enter the workspace
 laradock init
 
 # Start containers
-# Use default: nginx redis mysql 
-laradock up -d
-# Or by yourself
-laradock up nginx mysql
+laradock up nginx mysql redis
 
 # Stop containers
+laradock stop nginx 
+# Or stop all containers
 laradock stop
 
 # Enter workspace
-laradock workspace
+laradock bash
 # Or use root
-laradock workspace --root
+laradock bash --root
 
 # List all containers
 laradock ps
+
+# Edit docker-compose.yml
+laradock config
 
 ```
 
