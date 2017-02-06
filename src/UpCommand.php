@@ -9,6 +9,7 @@
 namespace LorinLee\LaradockCli\Console;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,7 +29,6 @@ class UpCommand extends Command
         $this
             ->setName('up')
             ->setDescription('Starts containers')
-            ->addOption('default', 'd', InputOption::VALUE_NONE, 'Use default containers: nginx redis mysql')
             ->addArgument('containers', InputArgument::IS_ARRAY, 'Containers', null)
         ;
     }
@@ -43,17 +43,9 @@ class UpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $containers = $input->getArgument('containers');
-        if (count($containers) === 0) {
-            if ($input->getOption('default')) {
-                $containers = $this->defaultContainers();
-            } else {
-                $helper = $this->getHelper('question');
-                $question = new ConfirmationQuestion('No containers selected, starting all the containers?', false);
 
-                if (! $helper->ask($input, $output, $question)) {
-                    return ;
-                }
-            }
+        if (count($containers) === 0) {
+            throw new RuntimeException('No container selected');
         }
 
         $upParameter = implode(' ', $containers);
