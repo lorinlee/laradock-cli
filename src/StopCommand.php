@@ -9,8 +9,11 @@
 namespace LorinLee\LaradockCli\Console;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Process\Process;
 
 class StopCommand extends Command
@@ -24,7 +27,8 @@ class StopCommand extends Command
     {
         $this
             ->setName('stop')
-            ->setDescription('Stops all the containers')
+            ->setDescription('Stops selected containers')
+            ->addArgument('containers', InputArgument::IS_ARRAY, 'Containers', null)
         ;
     }
 
@@ -38,6 +42,19 @@ class StopCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $stopCommand = 'cd laradock && docker-compose stop';
+
+        $containers = $input->getArgument('containers');
+        if (count($containers) === 0) {
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion('No containers selected, stop all the containers?', false);
+
+            if (! $helper->ask($input, $output, $question)) {
+                return ;
+            }
+        } else {
+            $stopParameter = implode(' ', $containers);
+            $stopCommand .= ' '. $stopParameter;
+        }
 
         $process = new Process($stopCommand);
 
