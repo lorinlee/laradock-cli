@@ -10,6 +10,7 @@ namespace LorinLee\LaradockCli\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -27,6 +28,7 @@ class InitCommand extends Command
         $this
             ->setName('init')
             ->setDescription('Creates Laradock for current Laravel project')
+            ->addArgument('repo', InputArgument::OPTIONAL, 'Configured repo', null);
         ;
     }
 
@@ -44,15 +46,18 @@ class InitCommand extends Command
             throw new RuntimeException('laradock exists');
         }
 
+        $repoName = $input->getArgument('repo');
+        $repo = $this->laradockRepo($repoName);
+
         $initCommand = file_exists('.git') ? 'git submodule add' : 'git clone';
 
-        $process = new Process($initCommand. ' '. $this->laradockRepo());
+        $process = new Process($initCommand. ' '. $repo);
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);
         }
 
-        $output->writeln('<info>Init Laradock...</info>');
+        $output->writeln('<info>Init Laradock, Source: '. $repo. '</info>');
 
         $process->run(function ($type, $line) use ($output) {
             $output->writeln($line);
@@ -67,9 +72,9 @@ class InitCommand extends Command
      *
      * @return string Laradock repo
      */
-    protected function laradockRepo()
+    protected function laradockRepo($repoName)
     {
-        return 'https://github.com/LaraDock/laradock.git';
+        return RepoConfigManager::get($repoName);
     }
 
 }

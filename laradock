@@ -15,5 +15,6 @@ $application->add(new LorinLee\LaradockCli\Console\BashCommand);
 $application->add(new LorinLee\LaradockCli\Console\StopCommand);
 $application->add(new LorinLee\LaradockCli\Console\PsCommand);
 $application->add(new LorinLee\LaradockCli\Console\ConfigCommand);
+$application->add(new LorinLee\LaradockCli\Console\RepoCommand);
 
 $application->run();
