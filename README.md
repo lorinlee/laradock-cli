@@ -30,7 +30,16 @@ laradock ps
 
 # Edit docker-compose.yml
 laradock config
+```
 
+Now you can use your own repo
+
+```
+# Set repo config
+laradock repo myownrepo git@github.com:lorinlee/laradock.git
+
+# Use configured repo to init
+laradock init myownrepo
 ```
 
 # License
