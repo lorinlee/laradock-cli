@@ -15,7 +15,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-
 class InitCommand extends Command
 {
 
@@ -58,19 +57,16 @@ class InitCommand extends Command
      * @return void
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      * @throws \Symfony\Component\Process\Exception\LogicException
-     * @throws \Symfony\Component\Process\Exception\RuntimeException
      * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         if (file_exists('laradock') && is_dir('laradock')) {
             throw new RuntimeException('laradock exists');
         }
 
         $repoName = $input->getArgument('repo');
         $repo = $this->laradockRepo($repoName);
-
 
         $initCommand = 'git clone';
         if ($this->repoConfigManager->get('config_submodule') === 'yes' && file_exists('.git')) {
@@ -94,7 +90,6 @@ class InitCommand extends Command
         $process->run();
 
         $output->writeln('<comment>Done.</comment>');
-
     }
 
     /**
