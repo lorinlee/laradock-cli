@@ -61,7 +61,8 @@ class InitCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (file_exists('laradock') && is_dir('laradock')) {
+        $dirname = Helpers::getLaradockDirectoryName();
+        if (file_exists($dirname) && is_dir($dirname)) {
             throw new RuntimeException('laradock exists');
         }
 
@@ -73,7 +74,7 @@ class InitCommand extends Command
             $initCommand = 'git submodule add';
         }
 
-        $process = new Process($initCommand . ' ' . $repo);
+        $process = new Process($initCommand . ' ' . $repo . ' ' . $dirname);
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);
@@ -86,7 +87,7 @@ class InitCommand extends Command
         });
 
         $output->writeln('<comment>Initializing default config.</comment>');
-        $process = new Process('cd laradock && cp env-example .env');
+        $process = new Process('cd ' . $dirname . ' && cp env-example .env');
         $process->run();
 
         $output->writeln('<comment>Done.</comment>');

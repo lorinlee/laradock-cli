@@ -42,7 +42,7 @@ class BashCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $workspaceCommand = 'cd laradock && docker-compose exec ';
+        $workspaceCommand = 'cd ' . Helpers::getLaradockDirectoryName() . ' && docker-compose exec ';
         if (!$input->getOption('root')) {
             $workspaceCommand .= '--user=laradock ';
         }

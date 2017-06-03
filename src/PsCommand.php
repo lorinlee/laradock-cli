@@ -29,7 +29,7 @@ class PsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $psCommand = 'cd laradock && docker-compose ps';
+        $psCommand = 'cd ' . Helpers::getLaradockDirectoryName() . ' && docker-compose ps';
 
         $process = new Process($psCommand);
 

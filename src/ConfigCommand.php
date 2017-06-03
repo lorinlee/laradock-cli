@@ -35,7 +35,7 @@ class ConfigCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configCommand = 'cd laradock && vim docker-compose.yml';
+        $configCommand = 'cd ' . Helpers::getLaradockDirectoryName() . ' && vim docker-compose.yml';
 
         passthru($configCommand);
     }
