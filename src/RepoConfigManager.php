@@ -112,22 +112,28 @@ class RepoConfigManager
     {
         if (! self::isConfigDirExists() || ! self::isConfigFileExists()) return null;
 
-        $configFile = file_exists(self::getConfigFile());
+        $configFile = file_get_contents(self::getConfigFile());
 
         $config = json_decode($configFile, true);
 
-        if (! $config) return null;
+        if (!$config || !is_array($config)) return null;
 
         return $config;
     }
 
     public static function getDefaultConfigName()
     {
+        if (self::get('default')) {
+          return self::get('default');
+        }
         return self::DEFAULT_NAME;
     }
 
     public static function getDefaultConfigRepo()
     {
+        if (self::get('default')) {
+          return self::get(self::get('default'));
+        }
         return self::DEFAULT_REPO;
     }
 }

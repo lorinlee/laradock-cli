@@ -42,14 +42,18 @@ class InitCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        if (file_exists('laradock')) {
+        if (file_exists('laradock') && is_dir('laradock')) {
             throw new RuntimeException('laradock exists');
         }
 
         $repoName = $input->getArgument('repo');
         $repo = $this->laradockRepo($repoName);
 
-        $initCommand = file_exists('.git') ? 'git submodule add' : 'git clone';
+
+        $initCommand = 'git clone';
+        if (RepoConfigManager::get('submodule') && file_exists('.git')) {
+          $initCommand = 'git submodule add';
+        }
 
         $process = new Process($initCommand. ' '. $repo);
 
