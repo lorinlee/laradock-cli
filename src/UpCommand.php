@@ -12,13 +12,26 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Process\Process;
 
 class UpCommand extends Command
 {
+
+    /**
+     * @var RepoConfigManager;
+     */
+    private $repoConfigManager;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct($name = null)
+    {
+        $this->repoConfigManager = new RepoConfigManager();
+        parent::__construct($name);
+    }
+
     /**
      * Configure the command options
      *
@@ -26,11 +39,12 @@ class UpCommand extends Command
      */
     protected function configure()
     {
-        $this
-            ->setName('up')
+        $this->setName('up')
             ->setDescription('Starts containers')
-            ->addArgument('containers', InputArgument::IS_ARRAY, 'Containers', null)
-        ;
+            ->addArgument('containers',
+                InputArgument::IS_ARRAY,
+                'Containers',
+                null);
     }
 
     /**
@@ -38,6 +52,7 @@ class UpCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -45,20 +60,25 @@ class UpCommand extends Command
         $containers = $input->getArgument('containers');
 
         if (count($containers) === 0) {
-            throw new RuntimeException('No container selected');
+            if ($this->repoConfigManager->get('config_use_default_container') === 'yes') {
+                $containers = $this->getDefaultContainers();
+            }
+            else {
+                throw new RuntimeException('No container selected');
+            }
         }
 
         $upParameter = implode(' ', $containers);
 
-        $output->writeln('<info>Starting '. $upParameter. '</info>');
+        $output->writeln('<info>Starting ' . $upParameter . '</info>');
 
-        $process = new Process('cd laradock && docker-compose up -d '. $upParameter);
+        $process = new Process('cd laradock && docker-compose up -d ' . $upParameter);
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);
         }
 
-        $process->run(function ($type, $line) use ($output) {
+        $process->run(function ($line) use ($output) {
             $output->write($line);
         });
 
@@ -70,7 +90,7 @@ class UpCommand extends Command
      *
      * @return array containers
      */
-    protected function defaultContainers()
+    protected function getDefaultContainers()
     {
         return [
             'nginx',
