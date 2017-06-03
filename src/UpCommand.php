@@ -72,7 +72,7 @@ class UpCommand extends Command
 
         $output->writeln('<info>Starting ' . $upParameter . '</info>');
 
-        $process = new Process('cd laradock && docker-compose up -d ' . $upParameter);
+        $process = new Process('cd ' . Helpers::getLaradockDirectoryName() . ' && docker-compose up -d ' . $upParameter);
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);

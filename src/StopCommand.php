@@ -43,7 +43,7 @@ class StopCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $stopCommand = 'cd laradock && docker-compose stop';
+        $stopCommand = 'cd ' . Helpers::getLaradockDirectoryName() . ' && docker-compose stop';
 
         $containers = $input->getArgument('containers');
         if (count($containers) === 0) {
