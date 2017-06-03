@@ -14,8 +14,8 @@
         }
     },
     "require": {
-        "symfony/console": "^3.1",
-        "symfony/process": "^3.2"
+        "symfony/console": "3.x",
+        "symfony/process": "3.x"
     },
     "bin": [
         "laradock"

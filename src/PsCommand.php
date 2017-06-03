@@ -10,12 +10,12 @@ namespace LorinLee\LaradockCli\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 class PsCommand extends Command
 {
+
     /**
      * Configure the command options
      *
@@ -23,10 +23,8 @@ class PsCommand extends Command
      */
     protected function configure()
     {
-        $this
-            ->setName('ps')
-            ->setDescription('Lists all the running containers')
-        ;
+        $this->setName('ps')
+            ->setDescription('Lists all the running containers');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -42,6 +40,5 @@ class PsCommand extends Command
         $process->run(function ($type, $line) use ($output) {
             $output->write($line);
         });
-
     }
 }

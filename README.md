@@ -38,6 +38,15 @@ Now you can use your own repo
 # Set repo config
 laradock repo myownrepo git@github.com:lorinlee/laradock.git
 
+# Set default repo
+laradock repo config_default myownrepo
+
+# Prefer to use submodules (default no)
+laradock repo config_submodule yes
+
+# Disable enable the use of the default containers (default yes)
+laradock repo config_use_default_container yes
+
 # Use configured repo to init
 laradock init myownrepo
 ```

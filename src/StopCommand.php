@@ -11,13 +11,13 @@ namespace LorinLee\LaradockCli\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Process\Process;
 
 class StopCommand extends Command
 {
+
     /**
      * Configure the command options
      *
@@ -25,11 +25,12 @@ class StopCommand extends Command
      */
     protected function configure()
     {
-        $this
-            ->setName('stop')
+        $this->setName('stop')
             ->setDescription('Stops selected containers')
-            ->addArgument('containers', InputArgument::IS_ARRAY, 'Containers', null)
-        ;
+            ->addArgument('containers',
+                InputArgument::IS_ARRAY,
+                'Containers',
+                null);
     }
 
     /**
@@ -37,6 +38,7 @@ class StopCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -46,14 +48,15 @@ class StopCommand extends Command
         $containers = $input->getArgument('containers');
         if (count($containers) === 0) {
             $helper = $this->getHelper('question');
-            $question = new ConfirmationQuestion('No containers selected, stop all the containers?', false);
+            $question = new ConfirmationQuestion('No containers selected, stop all the containers?',
+                false);
 
-            if (! $helper->ask($input, $output, $question)) {
-                return ;
+            if (!$helper->ask($input, $output, $question)) {
+                return;
             }
         } else {
             $stopParameter = implode(' ', $containers);
-            $stopCommand .= ' '. $stopParameter;
+            $stopCommand .= ' ' . $stopParameter;
         }
 
         $process = new Process($stopCommand);

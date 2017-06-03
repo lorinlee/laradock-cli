@@ -17,6 +17,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RepoCommand extends Command
 {
+
+    /**
+     * @var RepoConfigManager;
+     */
+    private $repoConfigManager;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct($name = null) {
+        $this->repoConfigManager = new RepoConfigManager();
+        parent::__construct($name);
+    }
+
     /**
      * Configure the command option
      *
@@ -24,12 +38,16 @@ class RepoCommand extends Command
      */
     public function configure()
     {
-        $this
-            ->setName('repo')
+        $this->setName('repo')
             ->setDescription('Set LaraDock git repo, you can use your own repo.')
-            ->addArgument('name', InputArgument::OPTIONAL, 'LaraDock git repo config name', RepoConfigManager::getDefaultConfigName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'LaraDock git repo src', RepoConfigManager::getDefaultConfigRepo())
-        ;
+            ->addArgument('name',
+                InputArgument::OPTIONAL,
+                'LaraDock git repo config name',
+                $this->repoConfigManager->getDefaultConfigName())
+            ->addArgument('repo',
+                InputArgument::OPTIONAL,
+                'LaraDock git repo src',
+                $this->repoConfigManager->getDefaultConfigRepo());
     }
 
     /**
@@ -37,16 +55,16 @@ class RepoCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
      * @return void
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
         $repo = $input->getArgument('repo');
-        $result = RepoConfigManager::set($name, $repo);
+        $this->repoConfigManager->setConfig($name, $repo);
 
-        if (! $result) throw new RuntimeException('Failed');
-
-        $output->writeln('<info>Done. Set '. $name. ': '. $repo.'</info>');
+        $output->writeln('<info>Done. Set ' . $name . ': ' . $repo . '</info>');
     }
 }

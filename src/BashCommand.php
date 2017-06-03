@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BashCommand extends Command
 {
+
     /**
      * Configure the command options
      *
@@ -22,11 +23,13 @@ class BashCommand extends Command
      */
     protected function configure()
     {
-        $this
-            ->setName('bash')
+        $this->setName('bash')
             ->setDescription('Enters the workspace')
-            ->addOption('root', null, InputOption::VALUE_NONE, 'Using root', null)
-        ;
+            ->addOption('root',
+                null,
+                InputOption::VALUE_NONE,
+                'Using root',
+                null);
     }
 
     /**
@@ -34,12 +37,13 @@ class BashCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $workspaceCommand = 'cd laradock && docker-compose exec ';
-        if (! $input->getOption('root')) {
+        if (!$input->getOption('root')) {
             $workspaceCommand .= '--user=laradock ';
         }
 

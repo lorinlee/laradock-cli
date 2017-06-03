@@ -8,19 +8,115 @@
 
 namespace LorinLee\LaradockCli\Console;
 
+use Symfony\Component\Console\Exception\RuntimeException;
+
 class RepoConfigManager
 {
+
     const DEFAULT_NAME = 'origin';
+
     const DEFAULT_REPO = 'git@github.com:laradock/laradock.git';
+
+    /**
+     * @return mixed
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
+     */
+    public function getDefaultConfigName()
+    {
+        return $this->get('config_default');
+    }
+
+    /**
+     * @return mixed
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
+     */
+    public function getDefaultConfigRepo()
+    {
+        return $this->get($this->get('config_default'));
+    }
+
+
+    /**
+     * Set repo config
+     *
+     * @param $name     string name
+     * @param $repoSrc  string repo
+     *
+     * @return boolean  result
+     *
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
+     */
+    public function setConfig($name, $repoSrc)
+    {
+        if (empty($name) || empty($repoSrc)) {
+            throw new RuntimeException('Tried to set empty configuration');
+        }
+        $config = $this->getConfigArray();
+        $config[$name] = $repoSrc;
+
+        $this->writeConfigToConfigFile($config);
+    }
+
+    /**
+     * Get repo config
+     *
+     * @param string $name
+     *
+     * @return mixed
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
+     */
+    public function get($name)
+    {
+        $config = $this->getConfigArray();
+        if (!isset($config[$name])) {
+            throw new RuntimeException('Tried to access an undefined configuration');
+        }
+        return $config[$name];
+    }
+
+    /**
+     * @return array
+     */
+    private function getConfigArray()
+    {
+        if (!self::configDirectoryExists() || !self::configFileExists()) {
+            $this->generateDefaultConfig();
+        }
+
+        $configJson = file_get_contents(self::getConfigFilePath());
+        return json_decode($configJson, true);
+    }
+
+    private function generateDefaultConfig()
+    {
+        if (!self::configDirectoryExists()) {
+            mkdir(self::getConfigFileDirectory());
+        }
+        $config = [
+            self::DEFAULT_NAME => self::DEFAULT_REPO,
+            'config_default' => self::DEFAULT_NAME,
+            'config_use_default_container' => 'yes',
+            'config_submodule' => 'no',
+        ];
+        $this->writeConfigToConfigFile($config);
+    }
+
+    /**
+     * @param array $config
+     */
+    private function writeConfigToConfigFile(array $config)
+    {
+        file_put_contents(self::getConfigFilePath(), json_encode($config));
+    }
 
     /**
      * Get the repo config dir
      *
      * @return string config directory
      */
-    public static function getConfigDir()
+    public static function getConfigFileDirectory()
     {
-        return dirname(__FILE__). '/../config';
+        return dirname(__FILE__) . '/../config';
     }
 
     /**
@@ -28,9 +124,9 @@ class RepoConfigManager
      *
      * @return string config file
      */
-    public static function getConfigFile()
+    public static function getConfigFilePath()
     {
-        return self::getConfigDir(). '/repo.json';
+        return self::getConfigFileDirectory() . '/repo.json';
     }
 
     /**
@@ -38,9 +134,9 @@ class RepoConfigManager
      *
      * @return boolean
      */
-    public static function isConfigDirExists()
+    public static function configDirectoryExists()
     {
-        return file_exists(self::getConfigDir());
+        return file_exists(self::getConfigFileDirectory());
     }
 
     /**
@@ -48,86 +144,8 @@ class RepoConfigManager
      *
      * @return boolean
      */
-    public static function isConfigFileExists()
+    public static function configFileExists()
     {
-        return file_exists(self::getConfigFile());
-    }
-
-    /**
-     * Set repo config
-     *
-     * @param $name     string name
-     * @param $repoSrc  string repo
-     * @return boolean  result
-     */
-    public static function set($name = self::DEFAULT_NAME, $repoSrc = self::DEFAULT_REPO)
-    {
-        if (! $name) return false;
-
-        if (! self::isConfigDirExists()) {
-            mkdir(self::getConfigDir());
-        }
-
-        $config = self::getAll();
-
-        if (is_null($config)) $config = [];
-
-        $config[$name] = $repoSrc;
-
-        $configJson = json_encode($config);
-
-        file_put_contents(self::getConfigFile(), $configJson);
-
-        return true;
-
-    }
-
-    /**
-     * Get repo config
-     *
-     * @param string $name
-     * @return null
-     */
-    public static function get($name = self::DEFAULT_NAME)
-    {
-        if (! $name) return self::getDefaultConfigRepo();
-
-        if (! self::isConfigDirExists() || ! self::isConfigFileExists()) return self::getDefaultConfigRepo();
-
-        $configJson = file_get_contents(self::getConfigFile());
-
-        $config = json_decode($configJson, true);
-
-        if (! $config || ! isset($config[$name])) return self::getDefaultConfigRepo();
-
-        return $config[$name];
-    }
-
-    /**
-     * Get all config
-     *
-     * @return array|null
-     */
-    public static function getAll()
-    {
-        if (! self::isConfigDirExists() || ! self::isConfigFileExists()) return null;
-
-        $configFile = file_exists(self::getConfigFile());
-
-        $config = json_decode($configFile, true);
-
-        if (! $config) return null;
-
-        return $config;
-    }
-
-    public static function getDefaultConfigName()
-    {
-        return self::DEFAULT_NAME;
-    }
-
-    public static function getDefaultConfigRepo()
-    {
-        return self::DEFAULT_REPO;
+        return file_exists(self::getConfigFilePath());
     }
 }
